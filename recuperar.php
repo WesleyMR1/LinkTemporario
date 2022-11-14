@@ -2,19 +2,21 @@
     include('Conexao.php');
     $pdo = conectar();
 
-    if (isset($_GET['codigo'])) {
-        $codigo = $_GET['codigo'];
-        $emailCodigo = base64_decode($codigo);
+    if (isset($_GET['linkCodigo'])) {
+        $codigo = $_GET['linkCodigo'];
+        //descriptografaremail
 
         $res = $pdo->query("SELECT * from codigolink where codigo = '$codigo' AND data > Now();");
         $resul = $res->fetch(PDO::FETCH_ASSOC);
+
+        $emailCriptografado = base64_decode($resul['emailCriptografado']);
 
         if (isset($resul['codigo'])) {
             //
             if (isset($_POST['acao']) && $_POST['acao'] == "mudar") {
                 $novaSenha = $_POST['novaSenha'];
 
-                $atualizar = $pdo->query("UPDATE contas set senha = '$novaSenha' where email = '$emailCodigo' ;");
+                $atualizar = $pdo->query("UPDATE contas set senha = '$novaSenha' where email = '$emailCriptografado' ;");
                 if ($atualizar) {
                     $pdo->query("DELETE from codigolink where codigo = '$codigo';");
                     echo "Senha modificada!";

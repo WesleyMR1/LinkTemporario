@@ -11,7 +11,8 @@ create table  contas(
 create table codigoLink(
     id int not null primary key auto_increment,
     codigo varchar(250),
-    data datetime
+    data datetime,
+    emailCriptografado varchar(250)
 );
 
 insert into contas values ('wes@wes', '123');
